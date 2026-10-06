@@ -1,32 +1,26 @@
-# React + TypeScript + Vite
+# 🌐 Web Frontend (PWA)
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+Адаптивное веб-приложение для платформы Cyprus Orienteering Cup.
+Оптимизировано для судей на ПК и участников со смартфонов iOS (как PWA).
 
-Currently, two official plugins are available:
+## Стек технологий
+- **Язык**: TypeScript, React
+- **Сборщик**: Vite (настроен на ручное разделение чанков для оптимизации)
+- **Кэширование & API**: TanStack React Query (улучшенный UX при медленном интернете)
+- **Стиль**: Glassmorphism (чистый CSS на переменных)
+- **Карты**: Leaflet (Интерактивные гео-точки)
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+## Архитектура
+Используется компонентный подход. Каждая страница (Dashboard, Home) загружается лениво (`React.lazy`), что ускоряет первичную загрузку приложения. Дизайн-система (токены) полностью вынесена в `index.css`.
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the Oxlint configuration
-
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
-
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
-
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Запуск
+1. Установите зависимости:
+   ```bash
+   npm install
+   ```
+2. Создайте файл `.env` с ключами от Supabase.
+3. Запустите Dev-сервер:
+   ```bash
+   npm run dev
+   ```
+   Либо воспользуйтесь `docker-compose.dev.yml` в корне проекта.
