@@ -15,9 +15,11 @@ pipeline {
         
         // === 2. НАСТРОЙКИ ПРОЕКТА ===
         IMG_WEB       = "${REGISTRY_IP}:${REGISTRY_PORT}/cypruscup-web"
+        IMG_BACKEND   = "${REGISTRY_IP}:${REGISTRY_PORT}/cypruscup-backend"
         
         PROJECT_NAME  = "cypruscup"
         APP_PORT      = "8020" // Порт для веб-версии
+        API_PORT      = "3000" // Порт для бэкенда
         
         // Путь на физическом сервере Ubuntu
         DEPLOY_DIR    = "/opt/cypruscup"
@@ -37,15 +39,19 @@ pipeline {
             }
         }
 
-        stage('Build & Push Web') {
+        stage('Build & Push Images') {
             steps {
                 script {
                     echo "🔨 Building Web Frontend..."
                     sh "docker build --platform linux/amd64 -t ${IMG_WEB}:${BUILD_NUMBER} -t ${IMG_WEB}:latest ./web"
+                    echo "🔨 Building API Backend..."
+                    sh "docker build --platform linux/amd64 -t ${IMG_BACKEND}:${BUILD_NUMBER} -t ${IMG_BACKEND}:latest ./backend"
 
-                    echo "🚀 Pushing Web image..."
+                    echo "🚀 Pushing images..."
                     sh "docker push ${IMG_WEB}:${BUILD_NUMBER}"
                     sh "docker push ${IMG_WEB}:latest"
+                    sh "docker push ${IMG_BACKEND}:${BUILD_NUMBER}"
+                    sh "docker push ${IMG_BACKEND}:latest"
                 }
             }
         }
@@ -70,6 +76,12 @@ services:
     restart: unless-stopped
     ports:
       - "${APP_PORT}:80"
+  backend:
+    image: ${IMG_BACKEND}:${BUILD_NUMBER}
+    container_name: ${PROJECT_NAME}-backend
+    restart: unless-stopped
+    ports:
+      - "${API_PORT}:3000"
 EOF
 
                                 echo "⬇️ Pulling images..."
@@ -80,6 +92,7 @@ EOF
 
                                 echo "🧹 Removing old cypruscup images (keeping last 3 builds)..."
                                 docker images "${IMG_WEB}" --format "{{.Tag}}" | grep -E "^[0-9]+\\$" | sort -rn | tail -n +4 | xargs -r -I{} docker rmi "${IMG_WEB}:{}" || true
+                                docker images "${IMG_BACKEND}" --format "{{.Tag}}" | grep -E "^[0-9]+\\$" | sort -rn | tail -n +4 | xargs -r -I{} docker rmi "${IMG_BACKEND}:{}" || true
                                 
                                 echo "📊 Status:"
                                 docker compose ps
@@ -96,6 +109,7 @@ EOF
                     echo "🔍 Checking availability..."
                     sleep 5
                     sh "curl -f -I http://${DEPLOY_SERVER}:${APP_PORT}/"
+                    sh "curl -f http://${DEPLOY_SERVER}:${API_PORT}/health"
                 }
             }
         }
