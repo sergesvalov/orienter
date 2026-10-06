@@ -9,8 +9,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.cypruscup.app.data.EventEntity
 import com.cypruscup.app.ui.EventViewModel
+import com.cypruscup.app.ui.components.EventCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -25,7 +25,7 @@ fun EventListScreen(viewModel: EventViewModel = viewModel()) {
                 title = { Text("Cyprus Orienteering Cup") },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primaryContainer,
-                    titleContentColor = MaterialTheme.colorScheme.primary,
+                    titleContentColor = MaterialTheme.colorScheme.onPrimary,
                 )
             )
         }
@@ -60,21 +60,6 @@ fun EventListScreen(viewModel: EventViewModel = viewModel()) {
                     }
                 }
             }
-        }
-    }
-}
-
-@Composable
-fun EventCard(event: EventEntity) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp)
-    ) {
-        Column(modifier = Modifier.padding(16.dp)) {
-            Text(text = event.title, style = MaterialTheme.typography.titleLarge)
-            Spacer(modifier = Modifier.height(8.dp))
-            Text(text = "Date: ${event.startDate}", style = MaterialTheme.typography.bodyMedium, color = MaterialTheme.colorScheme.secondary)
-            Text(text = "Location: ${event.location}", style = MaterialTheme.typography.bodyMedium)
         }
     }
 }
