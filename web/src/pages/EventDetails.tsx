@@ -1,5 +1,4 @@
 import { useParams } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
 import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
@@ -16,14 +15,14 @@ let DefaultIcon = L.icon({
 L.Marker.prototype.options.icon = DefaultIcon;
 
 export default function EventDetails() {
-  const { t } = useTranslation();
+  const { id } = useParams();
   // coordinates for Troodos Mountains, Cyprus
   const position: [number, number] = [34.9234, 32.8833]; 
 
   return (
     <div className="animate-fade-in" style={{ padding: '2rem', maxWidth: '1200px', margin: '0 auto' }}>
       <div className="glass-panel" style={{ padding: '2rem', marginBottom: '2rem' }}>
-        <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem', color: 'var(--primary-color)' }}>Troodos O-Festival</h1>
+        <h1 style={{ fontSize: '2.5rem', marginBottom: '1rem', color: 'var(--primary-color)' }}>Troodos O-Festival {id && `(Event: ${id.slice(0,4)})`}</h1>
         <p style={{ fontSize: '1.2rem', color: 'var(--text-secondary)' }}>Stage 1 - Middle Distance</p>
         <p style={{ marginTop: '1rem' }}>Experience the challenging pine forests of the Troodos mountains at 1700m elevation. Expect technical rock features and steep slopes.</p>
       </div>

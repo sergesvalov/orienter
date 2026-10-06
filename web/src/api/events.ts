@@ -17,7 +17,7 @@ export async function getEvents(): Promise<Event[]> {
 export async function createEvent(event: EventInsert): Promise<Event> {
   const { data, error } = await supabase
     .from('events')
-    .insert([event])
+    .insert(event as any)
     .select()
     .single()
 
