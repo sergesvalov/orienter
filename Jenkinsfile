@@ -39,6 +39,18 @@ pipeline {
             }
         }
 
+        stage('Test Backend (QA)') {
+            steps {
+                script {
+                    echo "🧪 Running automated Jest tests for API Gateway..."
+                    // Запускаем тесты внутри эфемерного Docker-контейнера
+                    sh """
+                        docker run --rm -v "\$(pwd)/backend:/app" -w /app node:20-alpine sh -c "npm install && npm test"
+                    """
+                }
+            }
+        }
+
         stage('Build & Push Images') {
             steps {
                 script {
