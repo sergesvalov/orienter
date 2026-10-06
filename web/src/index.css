@@ -124,3 +124,8 @@ a {
 .nav-link:hover {
   color: var(--text-primary);
 }
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
